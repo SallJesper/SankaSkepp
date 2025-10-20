@@ -2,7 +2,7 @@ water = 0
 secretship = 1
 hitwater = 2
 hitship = 3
-test = ["A", "B", "C", "D", "E"]
+test = ["A", "B", "C", "D", "E"] #För for-loopar som kräver A-E
 A = [0, 0, 0, 0, 0]
 B = [0, 0, 0, 0, 0]
 C = [0, 1, 1, 1, 0]
@@ -18,6 +18,7 @@ def splash():
     print()          
     print("     a hit or miss game")
     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+    print()
 
 def menu(title, prompt, options): #Menyfunktion
     print(title)
@@ -34,7 +35,7 @@ def menu(title, prompt, options): #Menyfunktion
         else:
             print("You have selected an incorrect option, try again") #Felaktigt val
 
-def target_to_string(targets):
+def target_to_string(targets): #Funktion för att ändra koordinater till strängar
     string = ""
     for x in range(len(targets)):
         if targets[x] == water or targets[x] == secretship:
@@ -45,7 +46,7 @@ def target_to_string(targets):
             string = string + "X  "
     return string
 
-def choose_target(target):
+def choose_target(target): #Ger tillbaka användbar lista
     match target[0]:
         case "A":
             return(A)
@@ -57,12 +58,22 @@ def choose_target(target):
             return(D)
         case "E":
             return(E)
+        case _:
+            print("Try Again")
         
-def shoot_target():
-    shoot = input("Shoot target: ")
+def shoot_target(): #Skjutfunktion
+    while True: #Kollar att spelaren skrivit in giltiga koordinater
+        shoot = input("Shoot target: ")
+        match shoot[0]:
+            case "A" | "B" | "C" | "D" | "E":
+                match shoot[1]:
+                    case "1" | "2" | "3" | "4" | "5":
+                        break
+                    case _: print("Try again!")
+            case _: print("Try again!")
     lista = choose_target(shoot)
     target = lista[int(shoot[1])-1]
-    match target:
+    match target: #Ändrar brädet
         case 0:
             lista[int(shoot[1])-1] = hitwater
         case 1:
@@ -71,12 +82,9 @@ def shoot_target():
             print("You shot here already")
         case 3:
             print("Stop it they're already dead")
-
     
-    
-        
-test = ["A", "B", "C", "D", "E"]
-def view_targets():
+def view_targets(): #Printar strängar av brädet med hjälp av target_to_string
+    print()
     print("    1  2  3  4  5")
     print()
     string = ""
@@ -87,15 +95,17 @@ def view_targets():
         string = string + target_to_string(kolumner[a])
         print(string)
         a = a + 1
+    print()
 
-def user_actions():
+def user_actions(): #Funktion för användaren
     while won_game() == False:
         view_targets()
         shoot_target()
+    print()
     print("You have won the game!")
+    print()
         
-        
-def won_game():
+def won_game(): #Kollar om spelet är klart
     a = True
     x = 0
     for b in range(0, 5):
@@ -103,10 +113,8 @@ def won_game():
             if kolumner[b][c] == 1:
                 a = False
     return a
-won_game()
         
-
-def main():
+def main(): #Main
     splash()
     while True:
         mittval = menu("Select an action", "Option: ", options1)
@@ -115,4 +123,5 @@ def main():
         elif mittval == "q":
             break
 
+main()
 
