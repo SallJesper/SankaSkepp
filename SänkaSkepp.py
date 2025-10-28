@@ -2,15 +2,25 @@ water = 0
 secretship = 1
 hitwater = 2
 hitship = 3
-test = ["A", "B", "C", "D", "E"] #För for-loopar som kräver A-E
-A = [0, 0, 0, 0, 0]
-B = [0, 0, 0, 0, 0]
-C = [0, 1, 1, 1, 0]
-D = [0, 0, 0, 0, 0]
-E = [0, 0, 0, 0, 0]
-kolumner = [A, B, C, D, E]
+AtillE = ["A", "B", "C", "D", "E"] #För for-loopar som kräver A-E
+
+A = []
+B = []
+C = []
+D = []
+E = []
+kolumner = []
+
+A2 = []
+B2 = []
+C2 = []
+D2 = []
+E2 = []
+kolumner2 = []
 
 options1 = {"p":"Play", "q":"Quit"} #Listor till menu
+options2 = {"a":"Play again", "q":"Quit"} #Listor till menu
+options3 = {"1":"1 Player", "2":"2 Players"} #Listor till menu
 
 def splash():
     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
@@ -19,6 +29,39 @@ def splash():
     print("     a hit or miss game")
     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
     print()
+
+def create_grid():
+    global A
+    global B
+    global C
+    global D
+    global E
+    global kolumner
+    A = [0, 0, 0, 0, 0]
+    B = [0, 0, 0, 0, 0]
+    C = [0, 0, 0, 0, 0]
+    D = [0, 0, 0, 0, 0]
+    E = [0, 0, 0, 0, 0]
+    kolumner = [A, B, C, D, E]
+
+def place_ships():
+    for x in range(0, 5):
+        place = input("Place ship: ")
+        while True:
+            match place[0]:
+                case "A" | "B" | "C" | "D" | "E":
+                    match place[1]:
+                        case "1" | "2" | "3" | "4" | "5":
+                            break
+                        case _: print("Try again!")
+                case _: print("Try again!")
+        lista = choose_target(place)
+        target = lista[int(place[1])-1]
+        match target: #Ändrar brädet
+            case 0:
+                lista[int(place[1])-1] = secretship
+            case 1:
+                print("there is a ship here already")
 
 def menu(title, prompt, options): #Menyfunktion
     print(title)
@@ -89,7 +132,7 @@ def view_targets(): #Printar strängar av brädet med hjälp av target_to_string
     print()
     string = ""
     a = 0
-    for x in test:
+    for x in AtillE:
         string = ""
         string = string + x + "   "
         string = string + target_to_string(kolumner[a])
@@ -107,21 +150,29 @@ def user_actions(): #Funktion för användaren
         
 def won_game(): #Kollar om spelet är klart
     a = True
-    x = 0
     for b in range(0, 5):
         for c in range(0, 5):
             if kolumner[b][c] == 1:
                 a = False
     return a
+    if a == True:
+        A = [0, 0, 0, 0, 0]
+        B = [0, 0, 0, 0, 0]
+        C = [0, 1, 1, 1, 0]
+        D = [0, 0, 0, 0, 0]
+        E = [0, 0, 0, 0, 0]
+
         
 def main(): #Main
     splash()
+   
     while True:
         mittval = menu("Select an action", "Option: ", options1)
         if mittval == "p":
+            create_grid()
+            place_ships()
             user_actions()
         elif mittval == "q":
             break
 
 main()
-
